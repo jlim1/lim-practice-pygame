@@ -1,0 +1,71 @@
+import pygame
+import time
+import random
+
+pygame.init()
+display_width = 800
+display_height = 600
+screen = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption("3d")
+white = (255, 255, 255)
+black = (0, 0, 0)
+red = (200, 0, 0)
+light_red = (255, 0, 0)
+yellow = (200, 200, 0)
+light_yellow = (255, 255, 0)
+green = (34, 177, 76)
+light_green = (0, 255, 0)
+clock = pygame.time.Clock()
+smallfont = pygame.font.SysFont("comicsansms", 25)
+medfont = pygame.font.SysFont("comicsansms", 50)
+largefont = pygame.font.SysFont("comicsansms", 85)
+FPS = 30
+
+
+def square(startPoint, fullSize):
+    node_1 = [startPoint[0], startPoint[1]]
+    node_2 = [startPoint[0] + fullSize, startPoint[1]]
+    node_3 = [startPoint[0], startPoint[1] + fullSize]
+    node_4 = [startPoint[0] + fullSize, startPoint[1] + fullSize]
+    pygame.draw.line(screen, white, node_1, node_2)
+    pygame.draw.line(screen, white, node_3, node_4)
+    pygame.draw.line(screen, white, node_1, node_3)
+    pygame.draw.line(screen, white, node_2, node_4)
+    pygame.draw.circle(screen, light_green, node_1, 5)
+    pygame.draw.circle(screen, light_green, node_2, 5)
+    pygame.draw.circle(screen, light_green, node_3, 5)
+    pygame.draw.circle(screen, light_green, node_4, 5)
+
+
+def play():
+    location = [300, 200]
+    size = 200
+    current_move = 0
+    while True:
+        # Draining the event queue keeps keyboard and window-close events responsive.
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                raise SystemExit
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    current_move = -5
+                elif event.key == pygame.K_RIGHT:
+                    current_move = 5
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    current_move = 0
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    pass
+        screen.fill(black)
+        location[0] += current_move
+        square(location, size)
+        # Updating the window presents the pixels drawn on the display surface.
+        pygame.display.update()
+        # The clock limits the number of frames drawn per second.
+        clock.tick(FPS)
+    pygame.quit()
+    raise SystemExit
+
+
+play()

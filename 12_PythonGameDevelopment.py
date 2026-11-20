@@ -1,0 +1,44 @@
+import pygame
+
+pygame.init()
+white = (255, 255, 255)
+black = (0, 0, 0)
+red = (255, 0, 0)
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Slither")
+finished = False
+lead_x = 300
+lead_y = 300
+velocity_x = 0
+velocity_y = 0
+clock = pygame.time.Clock()
+while not finished:
+    # Draining the event queue keeps keyboard and window-close events responsive.
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            finished = True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                velocity_x = -10
+                velocity_y = 0
+            elif event.key == pygame.K_RIGHT:
+                velocity_x = 10
+                velocity_y = 0
+            elif event.key == pygame.K_UP:
+                velocity_y = -10
+                velocity_x = 0
+            elif event.key == pygame.K_DOWN:
+                velocity_y = 10
+                velocity_x = 0
+    if lead_x >= 800 or lead_x < 0 or lead_y >= 600 or (lead_y < 0):
+        finished = True
+    lead_x += velocity_x
+    lead_y += velocity_y
+    screen.fill(white)
+    pygame.draw.rect(screen, black, [lead_x, lead_y, 10, 10])
+    # Updating the window presents the pixels drawn on the display surface.
+    pygame.display.update()
+    # The clock limits the number of frames drawn per second.
+    clock.tick(30)
+pygame.quit()
+raise SystemExit
